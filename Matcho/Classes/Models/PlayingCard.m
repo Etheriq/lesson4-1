@@ -56,17 +56,36 @@
 
 
 -(int) match:(NSArray *)otherCards {
-	PlayingCard *card = [otherCards firstObject];
-	
-	if ([self.suit isEqualToString:card.suit]) {
-		return 1;
-	}
-	
-	if (self.rank == card.rank) {
-		return 4;
-	}
-	
-	return 0;
+//	PlayingCard *card = [otherCards firstObject];
+    int result = 0;
+    
+    for (PlayingCard *card in otherCards) {
+        
+        if ([self.suit isEqualToString:card.suit]) {
+            result += 1;
+        }
+        
+        if (self.rank == card.rank) {
+            result += 4 + [self checkColor:card.suit];
+        }
+    }
+    
+	return result;
+}
+
+- (int) checkColor: (NSString *) suit {
+    NSArray *redSuits = @[@"♦", @"♥"];
+    NSArray *blackSuits = @[@"♣", @"♠"];
+    int colorBonus = 0;
+    
+    if ([redSuits containsObject:self.suit] && [redSuits containsObject:suit]){
+        colorBonus = 10;
+    }
+    if ([blackSuits containsObject:self.suit] && [blackSuits containsObject:suit]){
+        colorBonus = 10;
+    }
+    
+    return colorBonus;
 }
 
 
