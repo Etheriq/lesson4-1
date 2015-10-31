@@ -56,15 +56,18 @@
 
 
 -(int) match:(NSArray *)otherCards {
-//	PlayingCard *card = [otherCards firstObject];
     int result = 0;
-    
     for (PlayingCard *card in otherCards) {
+        
+        if ([card.contents isEqualToString:@"Joker"]) {
+            result += 7;
+            
+            continue;
+        }
         
         if ([self.suit isEqualToString:card.suit]) {
             result += 1;
         }
-        
         if (self.rank == card.rank) {
             result += 4 + [self checkColor:card.suit];
         }

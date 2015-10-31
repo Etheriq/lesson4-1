@@ -24,7 +24,7 @@
 	self = [super init];
 	
 	if (self) {
-		for (NSUInteger i = 0; i < count; i++) {
+		for (NSUInteger i = 0; i < (count -1); i++) {
 			Card *card = [deck drawRandomCard];
 			
 			if (card) {
@@ -34,6 +34,9 @@
 				break;
 			}
 		}
+        Card *joker = [[Card alloc] init];
+        joker.contents = @"Joker";
+        [self.cards addObject:joker];
 	}
 	
 	return self;
@@ -53,6 +56,8 @@ static const int COST_TO_CHOOSE = 1;
 
 - (void)chooseCardAtIndex:(NSUInteger)index {
 	Card *card = [self cardAtIndex:index];
+    self.currentScore = 0;
+    int innerScore = 0;
 	
 	if (!card.isMatched) {
 		if (card.isChosen) {
@@ -69,34 +74,38 @@ static const int COST_TO_CHOOSE = 1;
 			if ([chosenCards count]) {
 				int matchScore = [card match:chosenCards];
 				if (matchScore) {
-					self.score += (matchScore * MATCH_BONUS);
-					
+					innerScore += (matchScore * MATCH_BONUS);
+                    
 					card.chosen = YES;
 					card.matched = YES;
 					for (Card *otherCard in chosenCards) {
 						otherCard.matched = YES;
 					}
 				} else {
-					int penalty = MISMATCH_PENALTY;
 					
-					self.score -= penalty;
-					
+					innerScore += (MISMATCH_PENALTY * -1);
 					card.chosen = YES;
 					for (Card *otherCard in chosenCards) {
 						otherCard.chosen = NO;
 					}
 				}
 			} else {
-				self.score -= COST_TO_CHOOSE;
+                innerScore += (COST_TO_CHOOSE * -1);
 				card.chosen = YES;
 			}
 		}
 	}
+    self.currentScore = innerScore;
+    self.score += innerScore;
 }
 
 
 - (Card *)cardAtIndex:(NSUInteger)index {
 	return (index < [self.cards count]) ? self.cards[index] : nil;
+}
+
+- (PlayingCard *) playCardAtIndex: (NSUInteger) index {
+    return  self.cards[index];
 }
 
 

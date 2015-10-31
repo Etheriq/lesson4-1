@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gameLogLabel;
+@property (weak, nonatomic) PlayingCard *currentPlayCard;
 
 @end
 
@@ -34,15 +35,16 @@
     
     self.game = nil;
     [self updateUI];
+    self.gameLogLabel.text = @"Log is empty.";
 }
 
 - (IBAction)cardButtonTapped:(UIButton *)sender {
 	NSUInteger cardIndex = [self.cardButtons indexOfObject:sender];
 	[self.game chooseCardAtIndex:cardIndex];
-	
+    
+    self.currentPlayCard = [self.game playCardAtIndex:cardIndex];
 	[self updateUI];
 }
-
 
 -(void) updateUI {
 	for (UIButton *cardButton in self.cardButtons) {
@@ -53,7 +55,8 @@
 		[cardButton setBackgroundImage:[self backgroundImageForCard:card]
 							  forState:UIControlStateNormal];
 		cardButton.enabled = !card.isMatched;
-        self.scoreLabel.text = [NSString stringWithFormat:@"Score: %li", self.game.score];
+        self.scoreLabel.text = [NSString stringWithFormat:@"Total score: %li", self.game.score];
+        self.gameLogLabel.text = [NSString stringWithFormat:@"Opened %@, current score: %li", self.currentPlayCard.contents, self.game.currentScore];
 	}
 }
 
@@ -66,7 +69,7 @@
 }
 
 - (void)viewDidLoad {
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %li", self.game.score];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Total score: %li", self.game.score];
     self.gameLogLabel.text = @"Log is empty.";
 }
 

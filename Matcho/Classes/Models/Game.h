@@ -18,7 +18,9 @@
 
 - (void)chooseCardAtIndex:(NSUInteger)index;
 - (Card *)cardAtIndex:(NSUInteger)index;
+- (PlayingCard *) playCardAtIndex: (NSUInteger) index;
 
 @property (nonatomic, readonly) NSInteger score;
+@property (assign, nonatomic) NSInteger currentScore;
 
 @end
