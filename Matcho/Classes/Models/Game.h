@@ -22,5 +22,6 @@
 
 @property (nonatomic, readonly) NSInteger score;
 @property (assign, nonatomic) NSInteger currentScore;
+@property (strong, nonatomic) NSString *matchLog;
 
 @end

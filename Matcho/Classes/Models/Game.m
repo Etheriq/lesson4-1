@@ -37,6 +37,7 @@
         Card *joker = [[Card alloc] init];
         joker.contents = @"Joker";
         [self.cards addObject:joker];
+        self.matchLog = @"";
 	}
 	
 	return self;
@@ -73,6 +74,7 @@ static const int COST_TO_CHOOSE = 1;
 			
 			if ([chosenCards count]) {
 				int matchScore = [card match:chosenCards];
+                Card *anotherCard = [chosenCards firstObject];
 				if (matchScore) {
 					innerScore += (matchScore * MATCH_BONUS);
                     
@@ -81,6 +83,8 @@ static const int COST_TO_CHOOSE = 1;
 					for (Card *otherCard in chosenCards) {
 						otherCard.matched = YES;
 					}
+                    
+                    self.matchLog = [NSString stringWithFormat:@"%@ and %@ is matched, your bonus is %i", card.contents, anotherCard.contents, innerScore];
 				} else {
 					
 					innerScore += (MISMATCH_PENALTY * -1);
@@ -88,6 +92,7 @@ static const int COST_TO_CHOOSE = 1;
 					for (Card *otherCard in chosenCards) {
 						otherCard.chosen = NO;
 					}
+                    self.matchLog = [NSString stringWithFormat:@"%@ and %@ is not matched, your penalty is %i", card.contents, anotherCard.contents, innerScore];
 				}
 			} else {
                 innerScore += (COST_TO_CHOOSE * -1);

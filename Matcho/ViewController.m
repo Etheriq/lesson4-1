@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gameLogLabel;
 @property (weak, nonatomic) PlayingCard *currentPlayCard;
+@property (weak, nonatomic) IBOutlet UILabel *cardLogLabel;
 
 @end
 
@@ -36,6 +37,7 @@
     self.game = nil;
     [self updateUI];
     self.gameLogLabel.text = @"Log is empty.";
+    self.cardLogLabel.text = @"Card log is empty.";
 }
 
 - (IBAction)cardButtonTapped:(UIButton *)sender {
@@ -55,6 +57,7 @@
 		[cardButton setBackgroundImage:[self backgroundImageForCard:card]
 							  forState:UIControlStateNormal];
 		cardButton.enabled = !card.isMatched;
+        self.cardLogLabel.text = [NSString stringWithString:self.game.matchLog];
         self.scoreLabel.text = [NSString stringWithFormat:@"Total score: %li", self.game.score];
         self.gameLogLabel.text = [NSString stringWithFormat:@"Opened %@, current score: %li", self.currentPlayCard.contents, self.game.currentScore];
 	}
@@ -69,8 +72,11 @@
 }
 
 - (void)viewDidLoad {
+    self.cardLogLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.cardLogLabel.numberOfLines = 0;
     self.scoreLabel.text = [NSString stringWithFormat:@"Total score: %li", self.game.score];
     self.gameLogLabel.text = @"Log is empty.";
+    self.cardLogLabel.text = @"Card log is empty.";
 }
 
 
